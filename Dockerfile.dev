@@ -1,0 +1,15 @@
+FROM node:alpine
+
+WORKDIR '/app'
+
+COPY package.json .
+
+RUN npm install
+
+# Since we are referencing our local machine for everything apart from node_modules and
+# so we don't need to COPY. However, for Production, we cannot reference the local machine
+# and so we want to leave COPY to better reflect what our Dockerfile for Production will
+# look like.
+COPY . .
+
+CMD ["npm", "run", "start"]

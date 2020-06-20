@@ -1,0 +1,20 @@
+version: "3"
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev # Override default Dockerfile name
+    ports:
+      - "3000:3000"
+    volumes:
+      - /app/node_modules # Bookmark (or hold onto) /app/node_modules in the container
+      - .:/app # Reference everything else on the local machine
+    stdin_open: true # To resolve https://github.com/facebook/create-react-app/issues/8688 and https://stackoverflow.com/questions/60790696/react-scripts-start-exiting-in-docker-foreground-cmd
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    command: ["npm", "run", "test"]
