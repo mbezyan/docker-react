@@ -1,0 +1,13 @@
+language: generic # Environment variables: https://docs.docker.com/engine/reference/run/#env-environment-variables
+sudo: required # Anytime we make use of Docker, we need super-user permissions
+services: # Tell TravisCI that we need Docker CLI pre-installed
+  - docker # TravisCI will automatically install a copy Docker CIL ready to go
+
+before_install: # A series of commands that executed before our tests are run or our project is deployed
+  - docker build -t mbezyan/docker-react -f Dockerfile.dev .
+
+script: # All the commands required to run our test suite. Travis-CI will watch the output of this and will look for any exit codes other than 0.
+  - docker run -e CI=true mbezyan/docker-react npm run test -- --coverage
+  # Note that "npm run test" by default runs the tests and waits for input. This will make Travis-CI think that our tests have crashed and not returned.
+  # CI=true forces Jest to run CI-mode and tests will only run once instead of launching the watcher: https://facebook.github.io/create-react-app/docs/running-tests#linux-macos-bash
+  # coverage: gives us code coverage
