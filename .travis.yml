@@ -11,3 +11,17 @@ script: # All the commands required to run our test suite. Travis-CI will watch 
   # Note that "npm run test" by default runs the tests and waits for input. This will make Travis-CI think that our tests have crashed and not returned.
   # CI=true forces Jest to run CI-mode and tests will only run once instead of launching the watcher: https://facebook.github.io/create-react-app/docs/running-tests#linux-macos-bash
   # coverage: gives us code coverage
+
+deploy: # This tells Travis-CI exactly how to take our application and deploy to AWS
+  provider: elasticbeanstalk # Travis-CS comes pre-configured with a number of providers e.g. AWS Elastic Beanstalk
+  region: "ap-southeast-2" # Taken from URL DockerReact-env.eba-9prpmxq8.ap-southeast-2.elasticbeanstalk.com
+  app: "docker-react"
+  env: "DockerReact-env"
+  # When Travis-CI wants to deploy, it zips all the files and copies to an S3 Bucket (Hard drive running on AWS),
+  # it will then tell Elastic Beanstalk that there is a new zipped file that it needs to re-deploy the application
+  bucket_name: "elasticbeanstalk-ap-southeast-2-329052544356"
+  bucket_path: "docker-react" # Should be the same as app (above)
+  on:
+    branch: master # This means that only deploy when code is pushed to branch "master"
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
