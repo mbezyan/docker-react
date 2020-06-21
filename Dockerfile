@@ -1,4 +1,4 @@
-FROM node:alpine AS builder
+FROM node:alpine
 WORKDIR '/app'
 COPY package.json .
 RUN npm install
@@ -14,5 +14,5 @@ FROM nginx
 # for EXPOSE and uses it to map the appropriate port. Otherwise, in almost
 # all other cases, it's just for dodumentation.
 EXPOSE 80
-COPY --from=builder /app/build /usr/share/nginx/html
+COPY --from=0 /app/build /usr/share/nginx/html
 # nginx will start automatically without an explicit start command
