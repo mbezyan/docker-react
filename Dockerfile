@@ -1,4 +1,4 @@
-FROM node:alpine as builder
+FROM node:alpine
 WORKDIR '/app'
 COPY package.json .
 RUN npm install
@@ -9,5 +9,5 @@ RUN npm run build
 
 # The follow FROM will terminate the above phase
 FROM nginx
-COPY --from=builder /app/build /usr/share/nginx/html
+COPY --from=0 /app/build /usr/share/nginx/html
 # nginx will start automatically without an explicit start command
